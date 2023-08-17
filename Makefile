@@ -7,7 +7,7 @@ PATH_LIBFT = ./libft/
 
 VPATH = $(addprefix $(PATH_SRCS), \
 		./ \
-		./parser/)
+		./sources/)
 
 SRCS = 	main.c \
 		signals.c \
@@ -15,6 +15,7 @@ SRCS = 	main.c \
 		pwd.c \
 		cd.c \
 		echo.c \
+		env.c \
 
 OBJS = $(patsubst %.c, $(PATH_OBJS)%.o, $(SRCS))
 

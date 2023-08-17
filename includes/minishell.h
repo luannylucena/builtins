@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 15:56:52 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/15 14:44:08 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/17 13:40:38 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ void    sigint_handler(int signal);
 void    ft_pwd();
 void    ft_cd(char **args);
 void    ft_echo(char **args);
-void    ft_env();
+void    ft_env(char **args);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:47:34 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/15 14:31:41 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/17 13:41:05 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int main(int argc, char **argv, char **envp)
         // }
         if (strcmp(token_args[0], "env") == 0)
         {
-            ft_env();
+            ft_env(token_args);
             free(token_args[0]);
             free(token_args);
         }
