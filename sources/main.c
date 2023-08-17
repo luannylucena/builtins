@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:47:34 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/17 13:41:05 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/17 16:59:03 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int main(int argc, char **argv, char **envp)
             ctrl_d(input_line);
         }
         
-        // if builtins (fazer um arquivo só para isso e compilar em uma linha só aqui)
+        // IF BILTINS??? (fazer um arquivo só para isso e compilar em uma linha só auqi na main)
 
         // if (builtins?)
         char **token_args = ft_split(input_line, ' ');
@@ -63,6 +63,7 @@ int main(int argc, char **argv, char **envp)
             free(token_args[0]);
             free(token_args);
         }
+        
         // if (strcmp(token_args[0], "unset") == 0)
         // {
         //     ft_unset(token_args);
@@ -71,15 +72,19 @@ int main(int argc, char **argv, char **envp)
         // }
         if (strcmp(token_args[0], "env") == 0)
         {
-            ft_env(token_args);
+            char **envp_copy;
+            envp_copy = envp; // para inicializar a função.
+
+            ft_env(envp_copy);
             free(token_args[0]);
             free(token_args);
         }
         if(input_line)
         {
-            printf("%s\n", input_line);    
+            printf("%s\n", input_line); 
+               
             // Adicionando o comando ao histórico do readline
-            if (strlen(input_line) > 0) //adaptar ao ft_strlen
+            if (ft_strlen(input_line) > 0) //adaptar ao ft_strlen
             {
                 add_history(input_line);
             }
