@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 15:56:52 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/17 16:43:32 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/22 21:34:23 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ void    ft_env(char **envp);
 int     env_count_var(char **envp);
 char	**env_duplicate(char **envp);
 void	envp_free(char **envp_copy);
+void    ft_export(char **envp_copy, char *arg);
 
 #endif

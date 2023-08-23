@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:47:34 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/17 16:59:03 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/22 21:34:50 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@ int main(int argc, char **argv, char **envp)
     char *input_line;
     signal(SIGQUIT, sigquit_handler);
     signal(SIGINT, sigint_handler);
+
+    char    **envp_copy;
+
+    envp_copy = envp; //para inicializar minha variável.
 
     while(1)
     {
@@ -63,12 +67,12 @@ int main(int argc, char **argv, char **envp)
             free(token_args[0]);
             free(token_args);
         }
-        
         // if (strcmp(token_args[0], "unset") == 0)
         // {
-        //     ft_unset(token_args);
+        //     ft_unset(envp_copy, token_args[1]);
         //     free(token_args[0]);
         //     free(token_args);
+        //     envp_free(envp_copy);
         // }
         if (strcmp(token_args[0], "env") == 0)
         {
@@ -78,6 +82,20 @@ int main(int argc, char **argv, char **envp)
             ft_env(envp_copy);
             free(token_args[0]);
             free(token_args);
+        }
+        if (strcmp(token_args[0], "export") == 0)
+        {
+            if(token_args[1] != NULL)
+            {
+                ft_export(envp_copy, token_args[1]);
+                    //printf("export: '%s': not a valid identifier\n", token_args[1]);
+                free(token_args[0]);
+                free(token_args);
+            }
+            else
+            {
+                ft_env(envp_copy);    
+            }
         }
         if(input_line)
         {
