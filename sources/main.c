@@ -18,9 +18,9 @@ int main(int argc, char **argv, char **envp)
     signal(SIGQUIT, sigquit_handler);
     signal(SIGINT, sigint_handler);
 
-    char    **envp_copy;
-
-    envp_copy = envp; //para inicializar minha variável.
+    t_minishell minishell;
+    minishell.envp_copy = env_duplicate(envp); // Crie uma cópia separada das variáveis de ambiente
+    minishell.export_list = env_duplicate(envp); // Crie uma cópia separada da lista de exportações
 
     while(1)
     {
@@ -29,83 +29,48 @@ int main(int argc, char **argv, char **envp)
         
         if(argc != 1)
             return(1);
-            
-        // Exibir o prompt e aguardar um comando usando readline
+       
         input_line = readline("minishell$ ");
 
         if (input_line == NULL)
-        {
             ctrl_d(input_line);
-        }
-        
-        // IF BILTINS??? (fazer um arquivo só para isso e compilar em uma linha só auqi na main)
 
-        // if (builtins?)
         char **token_args = ft_split(input_line, ' ');
+      
         if (strcmp(token_args[0], "exit") == 0)
-        {
             ft_exit(token_args);
-            free(token_args[0]);
-            free(token_args);
-        }
-        //checando se o usuário digitou pwd.
         if (strcmp(token_args[0], "pwd") == 0)
-        {
             ft_pwd(token_args);
-            free(token_args[0]);
-            free(token_args);
-        }
         if (strcmp(token_args[0], "cd") == 0)
-        {
             ft_cd(token_args);
-            free(token_args[0]);
-            free(token_args);
-        }
         if (strcmp(token_args[0], "echo") == 0)
-        {
             ft_echo(token_args);
-            free(token_args[0]);
-            free(token_args);
-        }
-        // if (strcmp(token_args[0], "unset") == 0)
-        // {
-        //     ft_unset(envp_copy, token_args[1]);
-        //     free(token_args[0]);
-        //     free(token_args);
-        //     envp_free(envp_copy);
-        // }
         if (strcmp(token_args[0], "env") == 0)
-        {
-            char **envp_copy;
-            envp_copy = envp; // para inicializar a função.
-
-            ft_env(envp_copy);
-            free(token_args[0]);
-            free(token_args);
-        }
+            ft_env(&minishell);
         if (strcmp(token_args[0], "export") == 0)
         {
-            if(token_args[1] != NULL)
-            {
-                ft_export(envp_copy, token_args[1]);
-                    //printf("export: '%s': not a valid identifier\n", token_args[1]);
-                free(token_args[0]);
-                free(token_args);
-            }
+            if (token_args[1] != NULL)
+                ft_export(&minishell, token_args);
             else
-            {
-                ft_env(envp_copy);    
-            }
+                ft_env(&minishell);
         }
+        if (strcmp(token_args[0], "unset") == 0)
+        {
+            if (token_args[1] != NULL)
+                ft_unset(&minishell, token_args[1]); 
+        }
+        int i = 0;
+        while (token_args[i] != NULL)
+        {
+            free(token_args[i]);
+            i++;
+        }
+        free(token_args);
         if(input_line)
         {
             printf("%s\n", input_line); 
-               
-            // Adicionando o comando ao histórico do readline
-            if (ft_strlen(input_line) > 0) //adaptar ao ft_strlen
-            {
+            if (ft_strlen(input_line) > 0)
                 add_history(input_line);
-            }
             free(input_line);
         }
     }

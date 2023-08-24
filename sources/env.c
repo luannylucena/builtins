@@ -26,35 +26,35 @@ int	env_count_var(char **envp)
 	
 	printf("%i\n", count);
 }
-
 // função para duplicar as variáveis dentro do env
 char	**env_duplicate(char **envp)
 {
-	int		count;
-	char	**envp_copy;
-	int		i;
-	
-	count = env_count_var(envp);
-	envp_copy = (char **)malloc(sizeof(char *)*(count + 1));
+    int		count;
+    char	**envp_copy;
+    int		i;
 
-	if(envp_copy == NULL)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-	i = 0;
-	while(i < count)
-	{
-		envp_copy[i] = ft_strdup(envp[i]);
-			i++;
-		if(envp_copy == NULL)
-		{
-			perror("ft_strdup");
-			exit(EXIT_FAILURE);
-		}
-	}
-	envp_copy[count] = NULL;
-	return (envp_copy);
+    count = env_count_var(envp);
+    envp_copy = (char **)malloc(sizeof(char *) * (count + 1));
+
+    if (envp_copy == NULL)
+    {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    i = 0;
+    while (i < count)
+    {
+        envp_copy[i] = ft_strdup(envp[i]);
+        if (envp_copy[i] == NULL)
+        {
+            perror("ft_strdup");
+            exit(EXIT_FAILURE);
+        }
+        i++;
+    }
+    envp_copy[count] = NULL;
+    return (envp_copy);
 }
 
 //função para dar free
@@ -71,16 +71,6 @@ void	envp_free(char **envp_copy)
 	free(envp_copy);
 }
 
-// essa função lista as variáveis de ambiente
-void    ft_env(char **envp)
-{
-
-	int	i;
-
-	i = 0;
-	while(envp[i] != NULL)
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
+void ft_env(t_minishell *minishell) {
+    print_export(minishell->export_list);
 }

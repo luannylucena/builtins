@@ -17,6 +17,7 @@ SRCS = 	main.c \
 		echo.c \
 		env.c \
 		export.c \
+		unset.c \
 
 OBJS = $(patsubst %.c, $(PATH_OBJS)%.o, $(SRCS))
 
