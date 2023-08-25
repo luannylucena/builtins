@@ -1,12 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_builtin.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/25 18:27:49 by lmedeiro          #+#    #+#             */
+/*   Updated: 2023/08/25 18:29:03 by lmedeiro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	execute_builtin (char **args, t_minishell *minishell)
+int	execute_builtin(char **args, t_minishell *minishell)
 {
 	if (strcmp(args[0], "exit") == 0)
 		ft_exit(args);
 	else if (strcmp(args[0], "pwd") == 0)
-		ft_pwd(args);
+		ft_pwd();
 	else if (strcmp(args[0], "cd") == 0)
 		ft_cd(args);
 	else if (strcmp(args[0], "echo") == 0)
