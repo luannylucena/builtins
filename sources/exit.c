@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 18:15:44 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/25 19:05:52 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/25 20:41:16 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,15 @@ int	ft_exit(char **input_line)
 	}
 	if (arg_count == 1)
 	{
-        ft_putendl_fd("Bye!!!", 1);
-        exit(EXIT_SUCCESS);
+		ft_putendl_fd("Bye!!!", 1);
+		exit(EXIT_SUCCESS);
 	}
-    if (!is_number(input_line[1]))
+	if (!is_number(input_line[1]))
 	{
-        ft_putendl_fd("exit: numeric argument required", 2);
-        return (0); // Mesmo aqui, não precisa retornar um valor
-    }
+		ft_putendl_fd("exit: numeric argument required", 2);
+		return (0);
+	}
 	exit_code = atoi(input_line[1]);
-	free(input_line); // Lembre-se de liberar a memória antes de sair
+	free(input_line);
 	exit(exit_code);
 }
