@@ -46,5 +46,6 @@ void	print_export(char **envs);
 void	ft_export(t_minishell *minishell, char **token_args);
 void	ft_env(t_minishell *minishell);
 void	ft_unset(t_minishell *minishell, char *var_name);
+int		execute_builtin (char **args, t_minishell *minishell);
 
 #endif
