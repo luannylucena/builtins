@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 15:56:52 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/22 21:34:23 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/30 17:55:15 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,13 @@ typedef struct s_minishell{
 	char	**export_copy;
 }	t_minishell;
 
+typedef struct {
+    char *command;
+    void (*function)(char **args);
+} BuiltInCommand;
+
 void	ctrl_d(char *input_line);
-int		ft_exit(char **input_line);
+void	ft_exit(char **args);
 void	sigquit_handler(int signal);
 void	sigint_handler(int signal);
 void	ft_pwd(void);
@@ -43,9 +48,9 @@ int		isvalid_export(char *key);
 int		check_export(char *str, char ***envs);
 void	add_export(char *str, char ***envs, int *count);
 void	print_export(char **envs);
-void	ft_export(t_minishell *minishell, char **token_args);
-void	ft_env(t_minishell *minishell);
-void	ft_unset(t_minishell *minishell, char *var_name);
-int		execute_builtin (char **args, t_minishell *minishell);
+void	ft_export(char **args);
+void	ft_env(void);
+void	ft_unset(char *arg);
+int		execute_builtin(char **args)
 
 #endif
