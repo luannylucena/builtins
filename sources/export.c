@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 18:41:01 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/25 18:48:12 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/29 20:56:09 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,27 +93,39 @@ int	check_export(char *str, char ***envs)
 	}
 }
 
-int	isvalid_export(char *key)
-{
-	int	i;
+int is_valid_identifier(char *identifier) {
+    if (!ft_isalpha(identifier[0]) && identifier[0] != '_')
+        return 0;
 
-	if (ft_isdigit(key[0]))
-	{
-		printf("Not a valid identifier: %s\n", key);
-		return (0); //retorna zero para dizer que não é um identificador válido
-	}
-	i = 0;
-	while (key[i])
-	{	
-		// Check for characters that are not allowed in an identifier
-		if (!isalnum(key[i]) && key[i] != '_')
-		{
-			printf("Not a valid identifier: %s\n", key);
-			return (0);
-		}
-		i++;
-	}
-	return (1);
+    for (int i = 1; identifier[i]; i++) {
+        if (!ft_isalnum(identifier[i]) && identifier[i] != '_')
+            return (0);
+    }
+    return (1);
+}
+
+int isvalid_export(char *key)
+{
+    char *equal_sign = strchr(key, '=');
+
+    if (equal_sign == NULL || equal_sign == key) {
+        printf("Not a valid export format: %s\n", key);
+        return (0);
+    }
+    // Check left side of '='
+    *equal_sign = '\0';
+    if (!is_valid_identifier(key)) {
+        *equal_sign = '=';
+        printf("Not a valid identifier: %s\n", key);
+        return (0);
+    }
+    *equal_sign = '=';
+    // Check right side of '='
+    if (!is_valid_identifier(equal_sign + 1)) {
+        printf("Not a valid identifier: %s\n", equal_sign + 1);
+        return (0);
+    }
+    return (1);
 }
 
 int find_export_index(char **export_list, char *key)
@@ -124,60 +136,89 @@ int find_export_index(char **export_list, char *key)
 	while (export_list[index] != NULL) {
 		if (strcmp(export_list[index], key) == 0)
 		{
-			return index;
+			return (index);
 		}
 		index++;
 	}
 	return (-1); // Indica que a variável não foi encontrada
 }
 
-void	ft_export(t_minishell *minishell, char **token_args)
-{
-	int	i;
-	int	index;
-	int	j;
+void ft_export(t_minishell *minishell, char **token_args) {
+    int i;
+    int index;
+    int j;
 
-	i = 1; //pulando o comando "export"
-	while (token_args[i] != NULL) //enquanto houver argumentos após o export.
+    i = 1; // pulando o comando "export"
+    while (token_args[i] != NULL)
 	{
-		char *arg;
+        char *arg = token_args[i]; // pega o argumento atual
 
-		*arg = token_args[i]; //pega o argumento atual
-		if (!isvalid_export(arg)) //verifica se é um argumento válido
-		{
-			printf("Not a valid identifier: %s\n", arg);
-			i++;
-			continue ;
-		}
-		index = find_export_index(minishell->export_list, arg);
-		if (index >= 0)
-		{
-			free(minishell->export_list[index]);
-			minishell->export_list[index] = ft_strdup(arg);
-			printf("Variable %s updated.\n", arg);
-		}
+		arg = token_args[i];
+        if (is_valid_identifier(arg))
+		{ // verifica se é um identificador válido
+            index = find_export_index(minishell->export_list, arg);
+            if (index >= 0) {
+                free(minishell->export_list[index]);
+                minishell->export_list[index] = ft_strdup(arg);
+                printf("Variable %s updated.\n", arg);
+            }
+			else
+			{
+                // Adicione a variável à lista de exportações
+                int count = env_count_var(minishell->export_list);
+                char **new_list = (char **)malloc(sizeof(char *) * (count + 2));
+                if (!new_list) {
+                    printf("Memory allocation error.\n");
+                    return ;
+                }
+                // Copiar elementos da lista anterior
+                j = 0;
+                while (j < count) {
+                    new_list[j] = ft_strdup(minishell->export_list[j]);
+                    j++;
+                }
+                add_export(arg, &new_list, &count); // Adicionar o novo elemento
+                envp_free(minishell->export_list);
+                minishell->export_list = new_list;
+                printf("Variable %s added.\n", arg);
+            }
+        }
+		else if (isvalid_export(arg))
+		{ // verifica se é um formato export válido (a=b)
+            // Código para adicionar variável no formato a=b
+            index = find_export_index(minishell->export_list, arg);
+            if (index >= 0)
+			{
+                free(minishell->export_list[index]);
+                minishell->export_list[index] = ft_strdup(arg);
+                printf("Variable %s updated.\n", arg);
+            }
+			else
+			{
+                // Adicione a variável à lista de exportações
+                int count;
+				count = env_count_var(minishell->export_list);
+                char **new_list = (char **)malloc(sizeof(char *) * (count + 2));
+                if (!new_list) {
+                    printf("Memory allocation error.\n");
+                    return;
+                }
+                // Copiar elementos da lista anterior
+                j = 0;
+                while (j < count) {
+                    new_list[j] = ft_strdup(minishell->export_list[j]);
+                    j++;
+                }
+                add_export(arg, &new_list, &count); // Adicionar o novo elemento
+                envp_free(minishell->export_list);
+                minishell->export_list = new_list;
+                printf("Variable %s added.\n", arg);
+            }
+        }
 		else
 		{
-			// Adicione a variável à lista de exportações
-			int	count = env_count_var(minishell->export_list);
-			char	**new_list = (char **)malloc(sizeof(char *) * (count + 2));
-			if (!new_list)
-			{
-				printf("Memory allocation error.\n");
-				return ;
-			}
-			// Copiar elementos da lista anterior
-			j = 0;
-			while (j < count)
-			{
-				new_list[j] = ft_strdup(minishell->export_list[j]);
-				j++;
-			}
-			add_export(arg, &new_list, &count); // Adicionar o novo elemento
-			envp_free(minishell->export_list);
-			minishell->export_list = new_list;
-			printf("Variable %s added.\n", arg);
-		}
-		i++;
-	}
+            printf("Not a valid identifier or export format: %s\n", arg);
+        }
+        i++;
+    }
 }
