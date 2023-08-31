@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:47:34 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/25 18:37:28 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/31 18:15:31 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,28 +32,21 @@ int	main(int argc, char **argv, char **envp)
 		if (input_line == NULL)
 			ctrl_d(input_line);
 		char **token_args = ft_split(input_line, ' ');
-		if (strcmp(token_args[0], "exit") == 0)
-			ft_exit(token_args);
-		if (strcmp(token_args[0], "pwd") == 0)
-			ft_pwd();
-		if (strcmp(token_args[0], "cd") == 0)
-			ft_cd(token_args);
-		if (strcmp(token_args[0], "echo") == 0)
-			ft_echo(token_args);
-		if (strcmp(token_args[0], "env") == 0)
-			ft_env(&minishell);
-		if (strcmp(token_args[0], "export") == 0)
-		{
-			if (token_args[1] != NULL)
-				ft_export(&minishell, token_args);
-			else
-				ft_env(&minishell);
-		}
-		if (strcmp(token_args[0], "unset") == 0)
-		{
-			if (token_args[1] != NULL)
-				ft_unset(&minishell, token_args[1]);
-		}
+
+		if (token_args[0] != NULL)
+        {
+            // Verifica se o comando é um comando built-in e o executa
+            if (execute_builtin(token_args, &minishell)) {
+                // Se for um comando built-in, continue para a próxima iteração do loop
+                continue;
+            }
+
+            // Caso contrário, trata o comando como um comando externo e executa
+            // ... (lógica para executar comandos externos)
+
+            // ... (libera memória, adiciona ao histórico, etc.)
+        }
+		
 		i = 0;
 		while (token_args[i] != NULL)
 		{

@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 18:41:01 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/29 22:05:24 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/31 17:57:03 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ int	check_export(char *str, char ***envs)
 	}
 }
 
-int is_valid_identifier(char *identifier) {
+// verifica se o primeiro caractere é uma letra ou o caractere _
+int is_valid_name(char *identifier) {
     if (!ft_isalpha(identifier[0]) && identifier[0] != '_')
         return 0;
 
@@ -103,8 +104,8 @@ int is_valid_identifier(char *identifier) {
     }
     return (1);
 }
-
-int isvalid_export(char *key)
+// verifica se um argumento está no formato correto (a=b)
+int is_valid_format(char *key)
 {
     char *equal_sign = strchr(key, '=');
 
@@ -114,20 +115,23 @@ int isvalid_export(char *key)
     }
     // Check left side of '='
     *equal_sign = '\0';
-    if (!is_valid_identifier(key)) {
+    if (!is_valid_name(key)) {
         *equal_sign = '=';
         printf("Not a valid identifier: %s\n", key);
         return (0);
     }
     *equal_sign = '=';
     // Check right side of '='
-    if (!is_valid_identifier(equal_sign + 1)) {
+    if (!is_valid_name(equal_sign + 1)) {
         printf("Not a valid identifier: %s\n", equal_sign + 1);
         return (0);
     }
     return (1);
 }
-
+//A função find_export_index procura por uma variável de ambiente em uma lista de exportações. 
+//Ela recebe um array export_list e uma string key representando o nome da variável a ser procurada.
+//A função percorre  a lista e compara cada elemento com a chave usando a função strcmp. Se encontrar a
+// variável, retorna o índice dela na lista, caso contrário, retorna -1.
 int find_export_index(char **export_list, char *key)
 {
 	int index;
@@ -143,18 +147,21 @@ int find_export_index(char **export_list, char *key)
 	return (-1); // Indica que a variável não foi encontrada
 }
 
-void ft_export(t_minishell *minishell, char **token_args) {
+void ft_export(t_minishell *minishell, char **token_args)
+{
     int i;
     int index;
     int j;
 
     i = 1; // pulando o comando "export"
-    while (token_args[i] != NULL) {
+    while (token_args[i] != NULL)
+    {
         char *arg = token_args[i]; // pega o argumento atual
 
         // Verifica se é um formato export válido (a=b)
         char *equal_sign = ft_strchr(arg, '=');
-        if (equal_sign != NULL && equal_sign != arg && equal_sign[1] != '\0') {
+        if (equal_sign != NULL && equal_sign != arg && equal_sign[1] != '\0')
+        {
             index = find_export_index(minishell->export_list, arg);
             if (index >= 0) {
                 free(minishell->export_list[index]);
@@ -179,9 +186,11 @@ void ft_export(t_minishell *minishell, char **token_args) {
                 minishell->export_list = new_list;
                 printf("Variable %s added.\n", arg);
             }
-        } else {
+        }
+        else
+        {
             // Verifica se é um identificador válido
-            if (is_valid_identifier(arg)) {
+            if (is_valid_name(arg)) {
                 index = find_export_index(minishell->export_list, arg);
                 if (index >= 0) {
                     // Variável já existe, atualiza o valor dela
