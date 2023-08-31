@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 18:41:01 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/31 17:57:03 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/31 20:19:11 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,66 +33,58 @@ void	add_export(char *str, char ***envs, int *count)
 	(*envs)[*count] = NULL;
 }
 
-int	check_export(char *str, char ***envs)
+int find_existing_variable(char *str, char **envs)
 {
-	int		i;
-	char	**new;
-	char	*equal_sign;
-
-	equal_sign = NULL;
-	equal_sign = strchr(str, '=');
-	if (str[0] == '\0')
-		return (ERROR);
-	if (equal_sign != NULL && equal_sign != str && equal_sign[1] != '\0')
-	{
-		*equal_sign = '\0'; // Temporariamente substitua '=' por '\0'
-		i = -1;
-		while ((*envs)[++i] != NULL)
-		{
-			if (!strcmp((*envs)[i], str))
-			{
-				// Variável já existe, atualizar o valor dela
-				free((*envs)[i]); // Liberar memória do valor antigo
-				(*envs)[i] = ft_strdup(equal_sign + 1); // Copiar novo valor
-				*equal_sign = '='; // Restaurar o caractere '=' para a string
-				return (SUCCESS);
-			}
-		}
-		*equal_sign = '='; // Restaurar o caractere '=' para a string
-		// Continuar com o código para adicionar a nova variável à lista
-		if (!(new = malloc(sizeof(char *) * (i + 2))))
-			return (ERROR);
-		i = -1;
-		while ((*envs)[++i])
-			new[i] = ft_strdup((*envs)[i]);
-		add_export(str, envs, &i);
-		*envs = new;
-		return (SUCCESS);
-	}
-	else
-	{
-		if (str[0] == '\0')
-			return (ERROR);
-		i = -1;
-		while ((*envs)[++i] != NULL)
-		{
-			if (!ft_strncmp((*envs)[i], str, ft_strlen(str)))
-			{
-				(*envs)[i] = ft_strdup(str);
-				return (SUCCESS);
-			}
-		}
-		if (!(new = malloc(sizeof(char *) * (i + 2))))
-			return (ERROR);
-		i = -1;
-		while ((*envs)[++i])
-			new[i] = ft_strdup((*envs)[i]);
-		add_export(str, envs, &i);
-		*envs = new;
-		return (SUCCESS);
-	}
+    int i = 0;
+    while (envs[i] != NULL)
+    {
+        if (!strcmp(envs[i], str))
+        {
+            return i;
+        }
+        i++;
+    }
+    return -1;
 }
 
+void update_variable_value(char *value, char ***envs, int index)
+{
+    free((*envs)[index]);
+    (*envs)[index] = ft_strdup(value);
+}
+
+void add_new_variable(char *str, char ***envs)
+{
+    int count = 0;
+    while ((*envs)[count] != NULL)
+    {
+        count++;
+    }
+    char **new_envs = malloc(sizeof(char *) * (count + 2));
+    int i = 0;
+    while ((*envs)[i] != NULL)
+    {
+        new_envs[i] = ft_strdup((*envs)[i]);
+        i++;
+    }
+    new_envs[i] = ft_strdup(str);
+    new_envs[i + 1] = NULL;
+    *envs = new_envs;
+}
+
+int find_existing_variable_prefix(char *str, char **envs)
+{
+    int i = 0;
+    while (envs[i] != NULL)
+    {
+        if (!ft_strncmp(envs[i], str, ft_strlen(str)))
+        {
+            return i;
+        }
+        i++;
+    }
+    return -1;
+}
 // verifica se o primeiro caractere é uma letra ou o caractere _
 int is_valid_name(char *identifier) {
     if (!ft_isalpha(identifier[0]) && identifier[0] != '_')
@@ -147,79 +139,83 @@ int find_export_index(char **export_list, char *key)
 	return (-1); // Indica que a variável não foi encontrada
 }
 
+void copy_previous_list(char **old_list, char **new_list, int count) {
+    for (int i = 0; i < count; i++) {
+        new_list[i] = old_list[i];
+    }
+}
+
+void handle_valid_export_format(t_minishell *minishell, char *arg)
+{
+    int index = find_export_index(minishell->export_list, arg);
+    if (index >= 0)
+    {
+        free(minishell->export_list[index]);
+        minishell->export_list[index] = ft_strdup(arg);
+        printf("Variable %s updated.\n", arg);
+    }
+    else
+    {
+        int count = env_count_var(minishell->export_list);
+        char **new_list = (char **)malloc(sizeof(char *) * (count + 2));
+        if (!new_list)
+        {
+            printf("Memory allocation error.\n");
+            return;
+        }
+        copy_previous_list(minishell->export_list, new_list, count);
+        add_export(arg, &new_list, &count);
+        envp_free(minishell->export_list);
+        minishell->export_list = new_list;
+        printf("Variable %s added.\n", arg);
+    }
+}
+
+void handle_valid_identifier(t_minishell *minishell, char *arg)
+{
+    int index = find_export_index(minishell->export_list, arg);
+    if (index >= 0)
+    {
+        free(minishell->export_list[index]);
+        minishell->export_list[index] = ft_strdup(arg);
+        printf("Variable %s updated.\n", arg);
+    }
+    else
+    {
+        int count = env_count_var(minishell->export_list);
+        char **new_list = (char **)malloc(sizeof(char *) * (count + 2));
+        if (!new_list)
+        {
+            printf("Memory allocation error.\n");
+            return;
+        }
+        copy_previous_list(minishell->export_list, new_list, count);
+        add_export(arg, &new_list, &count);
+        envp_free(minishell->export_list);
+        minishell->export_list = new_list;
+        printf("Variable %s added.\n", arg);
+    }
+}
+
 void ft_export(t_minishell *minishell, char **token_args)
 {
-    int i;
-    int index;
-    int j;
-
-    i = 1; // pulando o comando "export"
+    int i = 1; // skipping the "export" command
     while (token_args[i] != NULL)
     {
-        char *arg = token_args[i]; // pega o argumento atual
-
-        // Verifica se é um formato export válido (a=b)
-        char *equal_sign = ft_strchr(arg, '=');
-        if (equal_sign != NULL && equal_sign != arg && equal_sign[1] != '\0')
+        char *arg = token_args[i]; // get the current argument
+        if (is_valid_format(arg))
         {
-            index = find_export_index(minishell->export_list, arg);
-            if (index >= 0) {
-                free(minishell->export_list[index]);
-                minishell->export_list[index] = ft_strdup(arg);
-                printf("Variable %s updated.\n", arg);
-            } else {
-                // Adicione a variável à lista de exportações
-                int count = env_count_var(minishell->export_list);
-                char **new_list = (char **)malloc(sizeof(char *) * (count + 2));
-                if (!new_list) {
-                    printf("Memory allocation error.\n");
-                    return;
-                }
-                // Copiar elementos da lista anterior
-                j = 0;
-                while (j < count) {
-                    new_list[j] = ft_strdup(minishell->export_list[j]);
-                    j++;
-                }
-                add_export(arg, &new_list, &count); // Adicionar o novo elemento
-                envp_free(minishell->export_list);
-                minishell->export_list = new_list;
-                printf("Variable %s added.\n", arg);
-            }
+            handle_valid_export_format(minishell, arg);
+        }
+        else if (is_valid_name(arg))
+        {
+            handle_valid_identifier(minishell, arg);
         }
         else
         {
-            // Verifica se é um identificador válido
-            if (is_valid_name(arg)) {
-                index = find_export_index(minishell->export_list, arg);
-                if (index >= 0) {
-                    // Variável já existe, atualiza o valor dela
-                    free(minishell->export_list[index]);
-                    minishell->export_list[index] = ft_strdup(arg);
-                    printf("Variable %s updated.\n", arg);
-                } else {
-                    // Adicione a variável à lista de exportações
-                    int count = env_count_var(minishell->export_list);
-                    char **new_list = (char **)malloc(sizeof(char *) * (count + 2));
-                    if (!new_list) {
-                        printf("Memory allocation error.\n");
-                        return;
-                    }
-                    // Copiar elementos da lista anterior
-                    j = 0;
-                    while (j < count) {
-                        new_list[j] = ft_strdup(minishell->export_list[j]);
-                        j++;
-                    }
-                    add_export(arg, &new_list, &count); // Adicionar o novo elemento
-                    envp_free(minishell->export_list);
-                    minishell->export_list = new_list;
-                    printf("Variable %s added.\n", arg);
-                }
-            } else {
-                printf("Not a valid identifier or export format: %s\n", arg);
-            }
+            printf("Not a valid identifier or export format: %s\n", arg);
         }
         i++;
     }
 }
+
