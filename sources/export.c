@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 18:41:01 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/31 20:19:11 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/08/31 20:38:03 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,16 @@ void	add_export(char *str, char ***envs, int *count)
 
 int find_existing_variable(char *str, char **envs)
 {
-    int i = 0;
+    int i;
+
+    i = 0;
     while (envs[i] != NULL)
     {
         if (!strcmp(envs[i], str))
-        {
             return i;
-        }
         i++;
     }
-    return -1;
+    return (-1);
 }
 
 void update_variable_value(char *value, char ***envs, int index)
@@ -55,13 +55,14 @@ void update_variable_value(char *value, char ***envs, int index)
 
 void add_new_variable(char *str, char ***envs)
 {
-    int count = 0;
+    int count;
+    int i;
+    
+    count = 0;
     while ((*envs)[count] != NULL)
-    {
         count++;
-    }
     char **new_envs = malloc(sizeof(char *) * (count + 2));
-    int i = 0;
+    i = 0;
     while ((*envs)[i] != NULL)
     {
         new_envs[i] = ft_strdup((*envs)[i]);
@@ -74,33 +75,39 @@ void add_new_variable(char *str, char ***envs)
 
 int find_existing_variable_prefix(char *str, char **envs)
 {
-    int i = 0;
+    int i;
+    
+    i = 0;
     while (envs[i] != NULL)
     {
         if (!ft_strncmp(envs[i], str, ft_strlen(str)))
-        {
             return i;
-        }
         i++;
     }
-    return -1;
+    return (-1);
 }
 // verifica se o primeiro caractere é uma letra ou o caractere _
-int is_valid_name(char *identifier) {
+int is_valid_name(char *identifier)
+{
+    int i;
+    
+    i = 0;
     if (!ft_isalpha(identifier[0]) && identifier[0] != '_')
         return 0;
-
-    for (int i = 1; identifier[i]; i++) {
+    while (identifier[i])
+    {
         if (!ft_isalnum(identifier[i]) && identifier[i] != '_')
             return (0);
+        i++;
     }
     return (1);
 }
 // verifica se um argumento está no formato correto (a=b)
 int is_valid_format(char *key)
 {
-    char *equal_sign = strchr(key, '=');
+    char *equal_sign;
 
+    equal_sign = strchr(key, '=');
     if (equal_sign == NULL || equal_sign == key) {
         printf("Not a valid export format: %s\n", key);
         return (0);
@@ -114,7 +121,8 @@ int is_valid_format(char *key)
     }
     *equal_sign = '=';
     // Check right side of '='
-    if (!is_valid_name(equal_sign + 1)) {
+    if (!is_valid_name(equal_sign + 1))
+    {
         printf("Not a valid identifier: %s\n", equal_sign + 1);
         return (0);
     }
@@ -131,9 +139,7 @@ int find_export_index(char **export_list, char *key)
 	index = 0;
 	while (export_list[index] != NULL) {
 		if (strcmp(export_list[index], key) == 0)
-		{
 			return (index);
-		}
 		index++;
 	}
 	return (-1); // Indica que a variável não foi encontrada
@@ -173,7 +179,10 @@ void handle_valid_export_format(t_minishell *minishell, char *arg)
 
 void handle_valid_identifier(t_minishell *minishell, char *arg)
 {
-    int index = find_export_index(minishell->export_list, arg);
+    int index;
+    int count; 
+    
+    index = find_export_index(minishell->export_list, arg);
     if (index >= 0)
     {
         free(minishell->export_list[index]);
@@ -182,7 +191,7 @@ void handle_valid_identifier(t_minishell *minishell, char *arg)
     }
     else
     {
-        int count = env_count_var(minishell->export_list);
+        count = env_count_var(minishell->export_list);
         char **new_list = (char **)malloc(sizeof(char *) * (count + 2));
         if (!new_list)
         {
@@ -199,22 +208,18 @@ void handle_valid_identifier(t_minishell *minishell, char *arg)
 
 void ft_export(t_minishell *minishell, char **token_args)
 {
-    int i = 1; // skipping the "export" command
+    int i;
+    
+    i = 1; // skipping the "export" command
     while (token_args[i] != NULL)
     {
         char *arg = token_args[i]; // get the current argument
         if (is_valid_format(arg))
-        {
             handle_valid_export_format(minishell, arg);
-        }
         else if (is_valid_name(arg))
-        {
             handle_valid_identifier(minishell, arg);
-        }
         else
-        {
             printf("Not a valid identifier or export format: %s\n", arg);
-        }
         i++;
     }
 }
