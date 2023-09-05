@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 14:33:38 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/31 18:23:31 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:21:59 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,9 @@ void	envp_free(char **envp_copy)
 
 void ft_env(t_minishell *minishell)
 {
-	print_export(minishell->export_list);
+    // Supondo que o minishell->envp_copy contém as variáveis de ambiente
+    for (int i = 0; minishell->envp_copy[i] != NULL; i++)
+    {
+        printf("%s\n", minishell->envp_copy[i]);
+    }
 }

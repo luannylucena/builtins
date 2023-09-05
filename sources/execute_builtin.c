@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 18:27:49 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/31 18:20:19 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/04 21:12:29 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ int	execute_builtin(char **args, t_minishell *minishell)
 		ft_env(minishell);
 	else if (strcmp(args[0], "export") == 0)
 	{
-		if (args[1] != NULL)
-			ft_export(minishell, args);
+        if (args[1] != NULL)
+            ft_export(minishell, args);
+        else if(args[1] == NULL)
+            check_only_export(minishell);
 		else
 			ft_env(minishell);
-	}
+    }
 	else if (strcmp(args[0], "unset") == 0)
 	{
 		if (args[1] != NULL)
@@ -40,4 +42,3 @@ int	execute_builtin(char **args, t_minishell *minishell)
 		return (0);// Não é um comando built-in
 	return (1);// É um comando built-in
 }
-
