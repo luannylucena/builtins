@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 15:57:34 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 17:51:16 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/05 17:58:35 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,10 @@ int	update_when_exists(char *token_args, int len, t_minishell *minishell)
 				return (1);
 			}
 		}
-		else
-		{
-			if (!ft_strncmp(minishell->envp_copy[j], token_args, len)
-				&& (minishell->envp_copy[j][len] == '\0'
-				|| minishell->envp_copy[j][len] == '='))
-				return (1);
-		}
+		else if (!ft_strncmp(minishell->envp_copy[j], token_args, len)
+			&& (minishell->envp_copy[j][len] == '\0'
+			|| minishell->envp_copy[j][len] == '='))
+			return (1);
 		j++;
 	}
 	return (0);

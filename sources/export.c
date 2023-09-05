@@ -6,45 +6,65 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 15:52:28 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 16:02:35 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/05 18:39:51 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	update_env(char **token_args, int j, t_minishell *minishell)
+void	copy_env_vars(char **src, char **dst, int count)
 {
-	int		count;
-	int		i;
-	char	**new_envp;
+	int	i;
 
-	if (check_if_exists_exp(token_args, j, minishell))
-		return ;
-	count = env_count_var(minishell->envp_copy);
-	new_envp = (char **)malloc(sizeof(char *) * (count + 2));
-	if (new_envp == NULL)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
 	i = 0;
 	while (i < count)
 	{
-		new_envp[i] = ft_strdup(minishell->envp_copy[i]);
-		if (new_envp[i] == NULL)
+		dst[i] = ft_strdup(src[i]);
+		if (!dst[i])
 		{
 			perror("ft_strdup");
 			exit(EXIT_FAILURE);
 		}
 		i++;
 	}
-	new_envp[count] = ft_strdup(token_args[j]);
-	if (new_envp[count] == NULL)
+}
+
+char	**add_variable_to_env(char **envp_copy, const char *new_var)
+{
+	int		env_count;
+	char	**new_envp;
+
+	env_count = 0;
+	while (envp_copy[env_count])
+	{
+		env_count++;
+	}
+	new_envp = (char **)malloc((env_count + 2) * sizeof(char *));
+	if (!new_envp)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	copy_env_vars(envp_copy, new_envp, env_count);
+	new_envp[env_count] = ft_strdup(new_var);
+	if (!new_envp[env_count])
 	{
 		perror("ft_strdup");
 		exit(EXIT_FAILURE);
 	}
-	new_envp[count + 1] = NULL;
+	new_envp[env_count + 1] = NULL;
+	return (new_envp);
+}
+
+void	update_env(char **token_args, int j, t_minishell *minishell)
+{
+	char	**new_envp;
+
+	if (check_if_exists_exp(token_args, j, minishell))
+	{
+		return ;
+	}
+	new_envp = add_variable_to_env(minishell->envp_copy, token_args[j]);
 	envp_free(minishell->envp_copy);
 	minishell->envp_copy = new_envp;
 }

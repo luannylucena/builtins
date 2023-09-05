@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 15:56:52 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 17:28:40 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/05 18:25:31 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,6 @@ void	remove_env_i(char **envp_copy, int j);
 int		remove_if_exists(char *token_i, int j, int length, t_minishell *minishell);
 void	ft_unset(t_minishell *minishell, char *var_name);
 void	print_quotes(int i, int j, t_minishell *minishell);
+void	copy_env_vars(char **src, char **dst, int count);
 
 #endif
