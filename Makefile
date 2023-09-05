@@ -19,6 +19,7 @@ SRCS = 	main.c \
 		export.c \
 		unset.c \
 		execute_builtin.c \
+		export_utils.c \
 
 OBJS = $(patsubst %.c, $(PATH_OBJS)%.o, $(SRCS))
 
