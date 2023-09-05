@@ -20,6 +20,7 @@ SRCS = 	main.c \
 		unset.c \
 		execute_builtin.c \
 		export_utils.c \
+		free_minishell.c \
 
 OBJS = $(patsubst %.c, $(PATH_OBJS)%.o, $(SRCS))
 
