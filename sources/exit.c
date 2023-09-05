@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 18:15:44 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/08/25 20:41:16 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/05 18:58:37 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	ft_exit(char **input_line)
 	if (arg_count == 1)
 	{
 		ft_putendl_fd("Bye!!!", 1);
+		//clean_minishell(data);
 		exit(EXIT_SUCCESS);
 	}
 	if (!is_number(input_line[1]))

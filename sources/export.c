@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 15:52:28 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 18:39:51 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/05 19:20:24 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,20 @@ char	**add_variable_to_env(char **envp_copy, const char *new_var)
 	return (new_envp);
 }
 
-void	update_env(char **token_args, int j, t_minishell *minishell)
+void	update_env(char **token_args, int j)
 {
 	char	**new_envp;
 
-	if (check_if_exists_exp(token_args, j, minishell))
+	if (check_if_exists_exp(token_args, j))
 	{
 		return ;
 	}
-	new_envp = add_variable_to_env(minishell->envp_copy, token_args[j]);
-	envp_free(minishell->envp_copy);
-	minishell->envp_copy = new_envp;
+	new_envp = add_variable_to_env(g_minishell.envp_copy, token_args[j]);
+	envp_free(g_minishell.envp_copy);
+	g_minishell.envp_copy = new_envp;
 }
 
-void	ft_export(t_minishell *minishell, char **token_args)
+void	ft_export(char **token_args)
 {
 	int	i;
 
@@ -79,7 +79,7 @@ void	ft_export(t_minishell *minishell, char **token_args)
 		if (!check_isname_exp(token_args, i))
 			printf("export: %s: not a valid identifier\n", token_args[i]);
 		else
-			update_env(token_args, i, minishell);
+			update_env(token_args, i);
 		i++;
 	}
 }

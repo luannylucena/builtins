@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 18:57:17 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 17:26:29 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/05 19:18:47 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,32 +42,32 @@ void	remove_env_i(char **envp_copy, int j)
 	}
 }
 
-int	remove_if_exists(char *token_i, int j, int length, t_minishell *minishell)
+int	remove_if_exists(char *token_i, int j, int length)
 {
-	if (!ft_strncmp(minishell->envp_copy[j], token_i, length)
-		&& (!minishell->envp_copy[j][length]
-		|| minishell->envp_copy[j][length] == '='))
+	if (!ft_strncmp(g_minishell.envp_copy[j], token_i, length)
+		&& (!g_minishell.envp_copy[j][length]
+		|| g_minishell.envp_copy[j][length] == '='))
 	{
-		remove_env_i(minishell->envp_copy, j);
+		remove_env_i(g_minishell.envp_copy, j);
 		return (1);
 	}
 	return (0);
 }
 
-void	ft_unset(t_minishell *minishell, char *var_name)
+void	ft_unset(char *var_name)
 {
 	int	i;
 	int	index;
 
 	index = -1;
 	i = 0;
-	while (minishell->envp_copy[i] != NULL)
+	while (g_minishell.envp_copy[i] != NULL)
 	{
-		if (ft_strncmp(minishell->envp_copy[i]
+		if (ft_strncmp(g_minishell.envp_copy[i]
 				, var_name, ft_strlen(var_name)) == 0)
 		{
-			if (minishell->envp_copy[i][ft_strlen(var_name)] == '='
-			|| minishell->envp_copy[i][ft_strlen(var_name)] == '\0')
+			if (g_minishell.envp_copy[i][ft_strlen(var_name)] == '='
+			|| g_minishell.envp_copy[i][ft_strlen(var_name)] == '\0')
 			{
 				index = i;
 				break ;
@@ -77,11 +77,11 @@ void	ft_unset(t_minishell *minishell, char *var_name)
 	}
 	if (index == -1)
 		return ;
-	free(minishell->envp_copy[index]);
+	free(g_minishell.envp_copy[index]);
 	i = index;
-	while (minishell->envp_copy[i] != NULL)
+	while (g_minishell.envp_copy[i] != NULL)
 	{
-		minishell->envp_copy[i] = minishell->envp_copy[i + 1];
+		g_minishell.envp_copy[i] = g_minishell.envp_copy[i + 1];
 		i++;
 	}
 }

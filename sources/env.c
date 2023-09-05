@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 14:33:38 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/04 21:29:08 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/05 19:19:12 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ void	envp_free(char **envp_copy)
 	free(envp_copy);
 }
 
-void	ft_env(t_minishell *minishell)
+void	ft_env()
 {
 	int	i;
 
 	i = 0;
-	while (minishell->envp_copy[i] != NULL)
+	while (g_minishell.envp_copy[i] != NULL)
 	{
-		printf("%s\n", minishell->envp_copy[i]);
+		printf("%s\n", g_minishell.envp_copy[i]);
 		i++;
 	}
 }

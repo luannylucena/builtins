@@ -6,11 +6,13 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:47:34 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/04 19:54:20 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/05 19:04:39 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+t_minishell g_minishell;
 
 int	main(int argc, char **argv, char **envp)
 {

@@ -6,40 +6,40 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 15:57:34 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 17:58:35 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/05 19:22:52 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	update_when_exists(char *token_args, int len, t_minishell *minishell)
+int	update_when_exists(char *token_args, int len)
 {
 	int	j;
 
 	j = 0;
-	while (minishell->envp_copy[j])
+	while (g_minishell.envp_copy[j])
 	{	
 		if (ft_strchr(token_args, '='))
 		{
-			if (!ft_strncmp(minishell->envp_copy[j], token_args, len)
-				|| (!ft_strncmp(minishell->envp_copy[j], token_args, len - 1)
-					&& minishell->envp_copy[j][len - 1] == '\0'))
+			if (!ft_strncmp(g_minishell.envp_copy[j], token_args, len)
+				|| (!ft_strncmp(g_minishell.envp_copy[j], token_args, len - 1)
+					&& g_minishell.envp_copy[j][len - 1] == '\0'))
 			{
-				free(minishell->envp_copy[j]);
-				minishell->envp_copy[j] = ft_strdup(token_args);
+				free(g_minishell.envp_copy[j]);
+				g_minishell.envp_copy[j] = ft_strdup(token_args);
 				return (1);
 			}
 		}
-		else if (!ft_strncmp(minishell->envp_copy[j], token_args, len)
-			&& (minishell->envp_copy[j][len] == '\0'
-			|| minishell->envp_copy[j][len] == '='))
+		else if (!ft_strncmp(g_minishell.envp_copy[j], token_args, len)
+			&& (g_minishell.envp_copy[j][len] == '\0'
+			|| g_minishell.envp_copy[j][len] == '='))
 			return (1);
 		j++;
 	}
 	return (0);
 }
 
-int	check_if_exists_exp(char **token_args, int i, t_minishell *minishell)
+int	check_if_exists_exp(char **token_args, int i)
 {
 	int	len;
 
@@ -47,7 +47,7 @@ int	check_if_exists_exp(char **token_args, int i, t_minishell *minishell)
 		len = ft_strchr(token_args[i], '=') - &token_args[i][0] + 1;
 	else
 		len = ft_strlen(token_args[i]);
-	return (update_when_exists(token_args[i], len, minishell));
+	return (update_when_exists(token_args[i], len));
 }
 
 int	check_isname_exp(char **token_args, int i)
@@ -65,15 +65,15 @@ int	check_isname_exp(char **token_args, int i)
 	return (0);
 }
 
-void	print_quotes(int i, int j, t_minishell *minishell)
+void	print_quotes(int i, int j)
 {
-	if (minishell->export_list[i][j] != '\0')
+	if (g_minishell.export_list[i][j] != '\0')
 	{
 		ft_putstr_fd("=\"", 1);
 		j++;
-		while (minishell->export_list[i][j])
+		while (g_minishell.export_list[i][j])
 		{
-			ft_putchar_fd(minishell->export_list[i][j], 1);
+			ft_putchar_fd(g_minishell.export_list[i][j], 1);
 			j++;
 		}
 		ft_putchar_fd('\"', 1);
