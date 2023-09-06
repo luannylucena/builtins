@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 16:55:27 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 15:48:27 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/06 16:27:30 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_echo(char **args)
 
 	i = 1;
 	add_newline = 1;
-	if (args[i] != NULL && strcmp(args[i], "-n") == 0)
+	if (args[i] != NULL && ft_strncmp(args[i], "-n", 2) == 0)
 	{
 		add_newline = 0;
 		i++;

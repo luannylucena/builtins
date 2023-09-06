@@ -27,8 +27,9 @@ OBJS = $(patsubst %.c, $(PATH_OBJS)%.o, $(SRCS))
 LIBFT = $(PATH_LIBFT)libft.a
 
 CC = cc
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g3 -Wall -Wextra -Werror
 IFLAGS = -I $(PATH_INCL)
+CVALGRIND = valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp
 
 all: $(LIBFT) $(NAME)
 
@@ -45,6 +46,11 @@ $(PATH_OBJS)%.o: %.c
 
 $(PATH_OBJS):
 	mkdir -p $(PATH_OBJS)
+
+valgrind:
+	valgrind --trace-children=yes --track-fds=yes --track-origins=yes \
+	--suppressions=readline.supp --leak-check=full \
+	--show-leak-kinds=all --quiet ./minishell
 
 clean:
 	rm -rf $(PATH_OBJS)

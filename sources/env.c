@@ -6,13 +6,12 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 14:33:38 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 19:19:12 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/06 16:28:06 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-//função para contar as variáveis de ambiente
 int	env_count_var(char **envp)
 {
 	int	count;
@@ -26,7 +25,6 @@ int	env_count_var(char **envp)
 	printf("%i\n", count);
 }
 
-// função para duplicar as variáveis dentro do env
 char	**env_duplicate(char **envp)
 {
 	int		count;
