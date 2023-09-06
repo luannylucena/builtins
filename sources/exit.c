@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 18:15:44 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 20:17:54 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/06 12:12:02 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	ft_exit(char **input_line)
 		ft_putendl_fd("exit: numeric argument required", 2);
 		return (0);
 	}
-	exit_code = atoi(input_line[1]);
+	exit_code = ft_atoi(input_line[1]);
 	free(input_line);
 	exit(exit_code);
 }

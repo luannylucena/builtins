@@ -6,13 +6,13 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 15:57:34 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 19:22:52 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/06 12:48:38 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	update_when_exists(char *token_args, int len)
+int	check_and_update_var(char *token_args, int len)
 {
 	int	j;
 
@@ -39,7 +39,7 @@ int	update_when_exists(char *token_args, int len)
 	return (0);
 }
 
-int	check_if_exists_exp(char **token_args, int i)
+int	check_var(char **token_args, int i)
 {
 	int	len;
 
@@ -50,7 +50,7 @@ int	check_if_exists_exp(char **token_args, int i)
 	return (update_when_exists(token_args[i], len));
 }
 
-int	check_isname_exp(char **token_args, int i)
+int	is_valid_name(char **token_args, int i)
 {
 	int	j;
 
@@ -65,7 +65,7 @@ int	check_isname_exp(char **token_args, int i)
 	return (0);
 }
 
-void	print_quotes(int i, int j)
+void	add_quotes(int i, int j)
 {
 	if (g_minishell.export_list[i][j] != '\0')
 	{
