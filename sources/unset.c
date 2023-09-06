@@ -6,13 +6,13 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 18:57:17 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 19:18:47 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/06 16:09:48 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	check_isname_unset(char *token_args)
+int	is_name_unset(char *token_args)
 {
 	int	j;
 
@@ -27,7 +27,7 @@ int	check_isname_unset(char *token_args)
 	return (0);
 }
 
-void	remove_env_i(char **envp_copy, int j)
+void	index_to_remove_env(char **envp_copy, int j)
 {
 	while (envp_copy[j])
 	{
@@ -42,13 +42,13 @@ void	remove_env_i(char **envp_copy, int j)
 	}
 }
 
-int	remove_if_exists(char *token_i, int j, int length)
+int	if_exist_remove_unset(char *token_i, int j, int length)
 {
 	if (!ft_strncmp(g_minishell.envp_copy[j], token_i, length)
 		&& (!g_minishell.envp_copy[j][length]
 		|| g_minishell.envp_copy[j][length] == '='))
 	{
-		remove_env_i(g_minishell.envp_copy, j);
+		index_to_remove_env(g_minishell.envp_copy, j);
 		return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 15:52:28 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/06 12:26:47 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/06 16:01:09 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	copy_env_vars(char **src, char **dst, int count)
 	}
 }
 
-char	**add_variable_to_env(char **envp_copy, const char *new_var)
+char	**add_var_to_env(char **envp_copy, const char *new_var)
 {
 	int		env_count;
 	char	**new_envp;
@@ -56,15 +56,15 @@ char	**add_variable_to_env(char **envp_copy, const char *new_var)
 	return (new_envp);
 }
 
-void	update_env(char **token_args, int j)
+void	refresh_env(char **token_args, int j)
 {
 	char	**new_envp;
 
-	if (check_if_exists_exp(token_args, j))
+	if (check_var(token_args, j))
 	{
 		return ;
 	}
-	new_envp = add_variable_to_env(g_minishell.envp_copy, token_args[j]);
+	new_envp = add_var_to_env(g_minishell.envp_copy, token_args[j]);
 	envp_free(g_minishell.envp_copy);
 	g_minishell.envp_copy = new_envp;
 }
@@ -76,10 +76,10 @@ void	ft_export(char **token_args)
 	i = 1;
 	while (token_args[i])
 	{
-		if (!check_isname_exp(token_args, i))
+		if (!is_valid_name(token_args, i))
 			printf("export: %s: not a valid identifier\n", token_args[i]);
 		else
-			update_env(token_args, i);
+			refresh_env(token_args, i);
 		i++;
 	}
 }

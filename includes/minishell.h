@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 15:56:52 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/05 20:10:28 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/06 16:09:30 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,16 @@ void	print_export(char **envs);
 void	ft_export(char **token_args);
 void	ft_env();
 int		execute_builtin(char **args);
-int		update_when_exists(char *token_args, int len);
-int		check_if_exists_exp(char **token_args, int i);
-int		check_isname_exp(char **token_args, int i);
-void	update_env(char **token_args, int j);
-void	remove_env_i(char **envp_copy, int j);
-int		remove_if_exists(char *token_i, int j, int length);
+int		check_and_update_var(char *token_args, int len);
+int		check_var(char **token_args, int i);
+int		is_valid_name(char **token_args, int i);
+void	refresh_env(char **token_args, int j);
+void	index_to_remove_env(char **envp_copy, int j);
+int		if_exist_remove_unset(char *token_i, int j, int length);
 void	ft_unset(char *var_name);
-void	print_quotes(int i, int j);
+void	add_quotes(int i, int j);
 void	copy_env_vars(char **src, char **dst, int count);
 void	free_minishell();
+int		is_name_unset(char *token_args);
 
 #endif

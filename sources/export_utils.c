@@ -6,7 +6,7 @@
 /*   By: lmedeiro <lmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 15:57:34 by lmedeiro          #+#    #+#             */
-/*   Updated: 2023/09/06 12:48:38 by lmedeiro         ###   ########.fr       */
+/*   Updated: 2023/09/06 16:02:51 by lmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	check_var(char **token_args, int i)
 		len = ft_strchr(token_args[i], '=') - &token_args[i][0] + 1;
 	else
 		len = ft_strlen(token_args[i]);
-	return (update_when_exists(token_args[i], len));
+	return (check_and_update_var(token_args[i], len));
 }
 
 int	is_valid_name(char **token_args, int i)
